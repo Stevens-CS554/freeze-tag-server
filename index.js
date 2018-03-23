@@ -66,7 +66,7 @@ freezeTag.on("connection", socket => {
     }
 
     freezeTag.emit("player-moved", {
-      player: socketPlayer.id,
+      userId: socketPlayer.id,
       x: socketPlayer.x,
       y: socketPlayer.y
     });
