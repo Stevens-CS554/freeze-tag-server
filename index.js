@@ -8,6 +8,21 @@ const port = process.env.PORT || 8080;
 const freezeTag = io.of("/freeze-tag");
 const players = {};
 
+const positions = {
+  1: [false, false, false, false, false, false, false, false, false, false],
+  2: [false, false, false, false, false, false, false, false, false, false],
+  3: [false, false, false, false, false, false, false, false, false, false],
+  4: [false, false, false, false, false, false, false, false, false, false],
+  5: [false, false, false, false, false, false, false, false, false, false],
+  6: [false, false, false, false, false, false, false, false, false, false],
+  7: [false, false, false, false, false, false, false, false, false, false],
+  8: [false, false, false, false, false, false, false, false, false, false],
+  9: [false, false, false, false, false, false, false, false, false, false],
+  10: [false, false, false, false, false, false, false, false, false, false]
+};
+
+const getRandomPosition = () => Math.ceil(Math.random() * 10);
+
 app.use(cors());
 
 app.get("/", (req, res) => {
@@ -22,9 +37,16 @@ freezeTag.on("connection", socket => {
   let socketPlayer = null;
 
   socket.on("join", player => {
-    players[player.id] = player;
-    player.name = player.name.slice(0, 10);
+    const x = getRandomPosition();
+    const y = getRandomPosition();
+
+    player.x = x;
+    player.y = y;
+
     socketPlayer = player;
+
+    players[player.id] = player;
+
     freezeTag.emit("player-joined", player);
   });
 
