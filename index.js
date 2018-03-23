@@ -56,7 +56,10 @@ freezeTag.on("connection", socket => {
 
     const nowFrozenPlayers = Object.values(players).filter(
       player =>
-        player && player.x === socketPlayer.x && player.y === socketPlayer.y
+        player &&
+        player.id !== socketPlayer.id &&
+        player.x === socketPlayer.x &&
+        player.y === socketPlayer.y
     );
 
     nowFrozenPlayers.forEach(player => {
