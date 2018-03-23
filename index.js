@@ -8,19 +8,6 @@ const port = process.env.PORT || 8080;
 const freezeTag = io.of("/freeze-tag");
 const players = {};
 
-const positions = {
-  1: [false, false, false, false, false, false, false, false, false, false],
-  2: [false, false, false, false, false, false, false, false, false, false],
-  3: [false, false, false, false, false, false, false, false, false, false],
-  4: [false, false, false, false, false, false, false, false, false, false],
-  5: [false, false, false, false, false, false, false, false, false, false],
-  6: [false, false, false, false, false, false, false, false, false, false],
-  7: [false, false, false, false, false, false, false, false, false, false],
-  8: [false, false, false, false, false, false, false, false, false, false],
-  9: [false, false, false, false, false, false, false, false, false, false],
-  10: [false, false, false, false, false, false, false, false, false, false]
-};
-
 const getRandomPosition = () => Math.ceil(Math.random() * 10);
 
 app.use(cors());
@@ -51,6 +38,8 @@ freezeTag.on("connection", socket => {
   });
 
   socket.on("move", direction => {
+    if (socketPlayer.frozen) return;
+
     if (direction === "left") {
       if (socketPlayer.x === 1) return;
       socketPlayer.x--;
@@ -63,6 +52,18 @@ freezeTag.on("connection", socket => {
     } else {
       if (socketPlayer.y === 1) return;
       socketPlayer.y--;
+    }
+
+    const nowFrozenPlayers = Object.values(players).filter(
+      player => player.x === socketPlayer.x && player.y === socketPlayer.y
+    );
+
+    nowFrozenPlayers.forEach(player => {
+      player.frozen = true;
+    });
+
+    if (nowFrozenPlayers.length > 0) {
+      freezeTag.emit("players-frozen", nowFrozenPlayers.map(x => x.id));
     }
 
     freezeTag.emit("player-moved", {
