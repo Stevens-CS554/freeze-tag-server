@@ -22,9 +22,10 @@ freezeTag.on("connection", socket => {
   let socketPlayer = null;
 
   socket.on("join", player => {
-    freezeTag.emit("player-joined", player);
     players[player.id] = player;
+    player.name = player.name.slice(0, 10);
     socketPlayer = player;
+    freezeTag.emit("player-joined", player);
   });
 
   socket.on("disconnect", () => {
