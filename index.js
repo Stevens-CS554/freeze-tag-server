@@ -50,6 +50,28 @@ freezeTag.on("connection", socket => {
     freezeTag.emit("player-joined", player);
   });
 
+  socket.on("move", direction => {
+    if (direction === "left") {
+      if (socketPlayer.x === 1) return;
+      socketPlayer.x--;
+    } else if (direction === "right") {
+      if (socketPlayer.x === 10) return;
+      socketPlayer.x++;
+    } else if (direction === "up") {
+      if (socketPlayer.y === 10) return;
+      socketPlayer.y++;
+    } else {
+      if (socketPlayer.y === 1) return;
+      socketPlayer.y--;
+    }
+
+    freezeTag.emit("player-moved", {
+      player: socketPlayer.id,
+      x: socketPlayer.x,
+      y: socketPlayer.y
+    });
+  });
+
   socket.on("disconnect", () => {
     if (socketPlayer) {
       freezeTag.emit("player-left", socketPlayer);
