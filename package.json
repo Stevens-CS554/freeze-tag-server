@@ -1,0 +1,17 @@
+{
+  "name": "freeze-tag-server",
+  "version": "1.0.0",
+  "description": "a server... that allows freeze tag to be played",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Phil Barresi",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.4",
+    "express": "^4.16.2",
+    "socket.io": "^2.0.4"
+  }
+}
